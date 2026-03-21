@@ -1,6 +1,6 @@
 #include "ush.h"
-#include <stdio.h>
 #include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -16,7 +16,7 @@ Token *tokenize(char *line)
   while (*ptr && isspace(*ptr))
     ptr++;
 
-  start=ptr;
+  start = ptr;
 
   while (*ptr)
   {
@@ -34,10 +34,13 @@ Token *tokenize(char *line)
       // Save the symbol ()
       tokenized_line[token_count].type =
           (*ptr == '|') ? TOKEN_PIPE : TOKEN_REDIR;
-      
-      if (tokenized_line[token_count].type==TOKEN_REDIR)
+
+      if (tokenized_line[token_count].type == TOKEN_REDIR)
       {
-        fprintf(stderr,"There is not redirect support in this version (%s). \nIt'll come soon.\n",PROGRAM_VERSION);
+        fprintf(stderr,
+                "There is not redirect support in this version (%s). \nIt'll "
+                "come soon.\n",
+                PROGRAM_VERSION);
         return NULL;
       }
       tokenized_line[token_count++].value = strndup(ptr, 1);
@@ -56,7 +59,8 @@ Token *tokenize(char *line)
       }
 
       ptr++;
-      while (*ptr && isspace(*ptr)) ptr++;
+      while (*ptr && isspace(*ptr))
+        ptr++;
       start = ptr;
       continue;
     }
@@ -84,7 +88,8 @@ Token *tokenize(char *line)
       continue;
     }
 
-    if (lenght == 0 && !in_quote) start = ptr;
+    if (lenght == 0 && !in_quote)
+      start = ptr;
     lenght++;
     ptr++;
   }
@@ -100,14 +105,14 @@ Token *tokenize(char *line)
   return tokenized_line;
 }
 
-void free_tokens(Token* tokens)
+void free_tokens(Token *tokens)
 {
-  if (tokens==NULL)
+  if (tokens == NULL)
   {
     return;
   }
 
-  for (int i=0;tokens[i].value!=NULL;i++)
+  for (int i = 0; tokens[i].value != NULL; i++)
   {
     free(tokens[i].value);
   }

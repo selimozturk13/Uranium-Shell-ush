@@ -1,25 +1,24 @@
 #include "ush.h"
 #include <pwd.h>
+#include <readline/readline.h>
+#include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <readline/readline.h>
 
 void signal_handler(int sig)
 {
   (void)sig;
   printf("\n");
   rl_on_new_line();
-//  rl_replace_line("",0);
+  //  rl_replace_line("",0);
   rl_redisplay();
-  
 }
 
 int main()
 {
-  signal(SIGINT,signal_handler);
+  signal(SIGINT, signal_handler);
   // get username
   struct passwd *pw = getpwuid(geteuid());
   if (pw == NULL)
@@ -35,8 +34,8 @@ int main()
   // get host name
   if (gethostname(host, sizeof(host)) != 0)
   {
-    fprintf(stderr,"csfsh: cannot find host name.\n");
-    strcpy(host,"unknown-host");
+    fprintf(stderr, "csfsh: cannot find host name.\n");
+    strcpy(host, "unknown-host");
   }
 
   // get Current Working Directory
@@ -57,5 +56,4 @@ int main()
   cli_loop();
 
   return 0;
-  
 }

@@ -51,30 +51,34 @@ ASTNode *parse_pipeline(Token *tokens, int *pos)
   return current_node;
 }
 
-void free_ast(ASTNode* node)
+void free_ast(ASTNode *node)
 {
-    if (node==NULL) return;
+  if (node == NULL)
+    return;
 
-    switch (node->type)
+  switch (node->type)
+  {
+  case NODE_COMMAND:
+    if (node->data.cmd.args)
     {
-        case NODE_COMMAND:
-            if (node->data.cmd.args)
-            {
-                for(int i=0;node->data.cmd.args[i]!=NULL;i++)
-                {
-                    free(node->data.cmd.args[i]);
-                }
-                free(node->data.cmd.args);
-            }
-            break;
-        case NODE_PIPE:
-            
-            free_ast(node->data.pipe.left);
-            free_ast(node->data.pipe.right);
-            break;
-        case NODE_REDIR:
-            fprintf(stderr, "There is not redirect support at this version (%s).\n It'll come soon.\n",PROGRAM_VERSION);       
-            break;
+      for (int i = 0; node->data.cmd.args[i] != NULL; i++)
+      {
+        free(node->data.cmd.args[i]);
+      }
+      free(node->data.cmd.args);
     }
-    free(node);
+    break;
+  case NODE_PIPE:
+
+    free_ast(node->data.pipe.left);
+    free_ast(node->data.pipe.right);
+    break;
+  case NODE_REDIR:
+    fprintf(stderr,
+            "There is not redirect support at this version (%s).\n It'll come "
+            "soon.\n",
+            PROGRAM_VERSION);
+    break;
+  }
+  free(node);
 }

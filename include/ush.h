@@ -60,3 +60,4 @@ Token *tokenize(char *line);
 void free_tokens(Token* tokens);
 ASTNode *parse_pipeline(Token *tokens,int *pos);
 void free_ast(ASTNode* node);
+void executeAst(ASTNode* node);

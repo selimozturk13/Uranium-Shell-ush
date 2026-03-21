@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.10)
+
+# Project Name
+project(ush C)
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
+# Add the include directory so "ush.h" can be found
+include_directories(include)
+
+find_library(READLINE_LIBRARY NAMES readline)
+
+# Gather all source files from the src directory
+file(GLOB SOURCES "src/*.c")
+
+# Define the executable
+add_executable(ush ${SOURCES})
+
+if(READLINE_LIBRARY)
+    target_link_libraries(ush PRIVATE ${READLINE_LIBRARY})
+else()
+    message(FATAL_ERROR "Readline library not found!")
+endif()
+
+# Common compiler warnings to help with debugging
+target_compile_options(ush PRIVATE -Wall -Wextra -g)

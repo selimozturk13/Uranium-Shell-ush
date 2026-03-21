@@ -41,6 +41,13 @@ void cli_loop(void)
     {
       add_history(input);
     }
+    int pos=0;
+
+    Token* tokens=tokenize(input);
+    ASTNode *node=parse_pipeline(tokens, &pos);
+    free_tokens(tokens);
+    executeAst(node);
+    free_ast(node);
 
     free(input);
   }
