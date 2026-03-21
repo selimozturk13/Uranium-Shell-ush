@@ -1,5 +1,6 @@
 #pragma once
 
+#define PROGRAM_VERSION "v0.1.0"
 #define MAX_ARGS 64
 
 #include <limits.h>
@@ -42,7 +43,6 @@ typedef enum
   TOKEN_WORD,
   TOKEN_PIPE,
   TOKEN_REDIR,
-  TOKEN_EOF,
 } TokenType;
   
 typedef struct
@@ -58,3 +58,5 @@ extern char *username;
 void cli_loop(void);
 Token *tokenize(char *line);
 void free_tokens(Token* tokens);
+ASTNode *parse_pipeline(Token *tokens,int *pos);
+void free_ast(ASTNode* node);

@@ -1,4 +1,5 @@
 #include "ush.h"
+#include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,6 +34,12 @@ Token *tokenize(char *line)
       // Save the symbol ()
       tokenized_line[token_count].type =
           (*ptr == '|') ? TOKEN_PIPE : TOKEN_REDIR;
+      
+      if (tokenized_line[token_count].type==TOKEN_REDIR)
+      {
+        fprintf(stderr,"There is not redirect support in this version (%s). \nIt'll come soon.\n",PROGRAM_VERSION);
+        return NULL;
+      }
       tokenized_line[token_count++].value = strndup(ptr, 1);
       ptr++;
       start = ptr;
