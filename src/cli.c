@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 Selim Öztürk
+ * Copyright (C) 2026 Selim Öztürk
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,38 +17,79 @@
 
 #include "ush.h"
 #include <limits.h>
+#include <pwd.h>
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 void cli_loop(void)
 {
-  char *input;
-  char userpromt[1024 + PATH_MAX];
-  snprintf(userpromt, sizeof(userpromt), "%s@%s %s $", username, host, cwd);
+    char *input;
+    char userpromt[1024 + PATH_MAX];
 
-  while (1)
-  {
-    input = readline(userpromt);
-    if (input == NULL)
+    while (1)
     {
-      printf("\nExiting...\n");
-      break;
+        struct passwd *pw = getpwuid(geteuid());
+        if (pw == NULL)
+        {
+            fprintf(stderr, "ush: cannot find user name for UID. %d\n",
+                    getuid());
+            strcpy(username, "unknown-user");
+        }
+        else
+        {
+            username = strdup(pw->pw_name);
+        }
+
+        // get host name
+        if (gethostname(host, sizeof(host)) != 0)
+        {
+            fprintf(stderr, "ush: cannot find host name.\n");
+            strcpy(host, "unknown-host");
+        }
+
+        // get Current Working Directory
+        if (getcwd(cwd, sizeof(cwd)) == NULL)
+        {
+            fprintf(stderr, "ush: cannot get current working directory. \n");
+            char *pwd = getenv("PWD");
+            if (pwd)
+            {
+                strncpy(cwd, pwd, sizeof(cwd) - 1);
+            }
+            else
+            {
+                strcpy(cwd, "?");
+            }
+        }
+        snprintf(userpromt, sizeof(userpromt), "%s@%s %s $ ", username, host,
+                 cwd);
+        input = readline(userpromt);
+        if (input == NULL )
+        {
+            free(input);
+            break;
+        }
+
+        if (input != 0)
+        {
+            add_history(input);
+        }
+        int pos = 0;
+
+        Token *tokens = tokenize(input);
+        ASTNode *node = parse_pipeline(tokens, &pos);
+        free_tokens(tokens);
+        executeAst(node);
+        free_ast(node);
+
+        free(input);
+        if (pexit<=255)
+        {
+            break;
+        }
     }
-
-    if (input != 0)
-    {
-      add_history(input);
-    }
-    int pos=0;
-
-    Token* tokens=tokenize(input);
-    ASTNode *node=parse_pipeline(tokens, &pos);
-    free_tokens(tokens);
-    executeAst(node);
-    free_ast(node);
-
-    free(input);
-  }
 }

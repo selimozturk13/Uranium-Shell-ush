@@ -1,0 +1,14 @@
+
+Language: Cpp
+BasedOnStyle: LLVM
+
+
+BreakBeforeBraces: Allman
+
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+IndentCaseLabels: false
+ColumnLimit: 80
