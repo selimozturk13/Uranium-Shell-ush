@@ -22,8 +22,8 @@
 #include <readline/readline.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
+#include <errno.h>
 
 void cli_loop(void)
 {
@@ -32,44 +32,24 @@ void cli_loop(void)
 
     while (1)
     {
-        struct passwd *pw = getpwuid(geteuid());
-        if (pw == NULL)
+        update_promt();
+        
+        if (snprintf(userpromt, sizeof(userpromt), "%s@%s %s $ ", username, host,cwd)<0)
         {
-            fprintf(stderr, "ush: cannot find user name for UID. %d\n",
-                    getuid());
-            strcpy(username, "unknown-user");
-        }
-        else
-        {
-            username = strdup(pw->pw_name);
-        }
+            fprintf(stderr,"ush: critical: failed to format promt.");
+            free(username);
+            break;
 
-        // get host name
-        if (gethostname(host, sizeof(host)) != 0)
-        {
-            fprintf(stderr, "ush: cannot find host name.\n");
-            strcpy(host, "unknown-host");
         }
-
-        // get Current Working Directory
-        if (getcwd(cwd, sizeof(cwd)) == NULL)
-        {
-            fprintf(stderr, "ush: cannot get current working directory. \n");
-            char *pwd = getenv("PWD");
-            if (pwd)
-            {
-                strncpy(cwd, pwd, sizeof(cwd) - 1);
-            }
-            else
-            {
-                strcpy(cwd, "?");
-            }
-        }
-        snprintf(userpromt, sizeof(userpromt), "%s@%s %s $ ", username, host,
-                 cwd);
+        free(username);
         input = readline(userpromt);
         if (input == NULL )
         {
+            if (errno == EINTR) { 
+                errno = 0; 
+                continue;   
+            }
+            
             free(input);
             break;
         }

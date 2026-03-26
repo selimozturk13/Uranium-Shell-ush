@@ -9,7 +9,12 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 # Add the include directory so "ush.h" can be found
 include_directories(include)
 
-find_library(READLINE_LIBRARY NAMES readline)
+if(APPLE)
+    include_directories(/usr/local/include /opt/homebrew/include)
+    link_directories(/usr/local/lib /opt/homebrew/lib)
+endif()
+
+find_library(READLINE_LIBRARY NAMES readline edit)
 
 # Gather all source files from the src directory
 file(GLOB SOURCES "src/*.c")
