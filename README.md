@@ -17,7 +17,7 @@
 ### 1. Clone the repository (Download)
 
 ```bash
-git clone https://github.com/selimozturk13/ush.git
+git clone https://github.com/selimozturk13/Uranium-Shell-ush.git
 cd ush
 ```
 ### 2. Build
