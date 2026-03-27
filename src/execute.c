@@ -22,6 +22,23 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+static void builtin_echo(char **tokens)
+{
+    if (!tokens || !tokens[1])
+    {
+        putchar('\n');
+        return;
+    }
+
+    for (int i = 1; tokens[i] != NULL; i++)
+    {
+        fputs(tokens[i], stdout);
+        if (tokens[i + 1] != NULL)
+            putchar(' ');
+    }
+    putchar('\n');
+}
+
 void executeAst(ASTNode *node)
 {
     if (!node)
@@ -29,7 +46,8 @@ void executeAst(ASTNode *node)
 
     if (node->type == NODE_COMMAND)
     {
-        if (!(node->data.cmd.args != NULL && node->data.cmd.args[0] != NULL)) return;
+        if (!(node->data.cmd.args != NULL && node->data.cmd.args[0] != NULL))
+            return;
 
         if (!strcmp(node->data.cmd.args[0], "cd"))
         {
@@ -66,6 +84,11 @@ void executeAst(ASTNode *node)
                 pexit = 0;
             }
             return;
+        }
+
+        else if (strcmp(node->data.cmd.args[0], "echo") == 0)
+        {
+            builtin_echo(&node->data.cmd.args[0]);
         }
 
         else
