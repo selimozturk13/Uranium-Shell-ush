@@ -21,7 +21,7 @@
 #include <readline/history.h>
 #include <unistd.h>
 #include <signal.h>
-#include <stdio.h>
+
 
 extern int rl_done;
 
