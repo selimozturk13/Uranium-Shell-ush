@@ -18,9 +18,9 @@
 #include "ush.h"
 #include <limits.h>
 #include <pwd.h>
+#include <stdio.h>
 #include <readline/history.h>
 #include <readline/readline.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
@@ -61,6 +61,12 @@ void cli_loop(void)
         int pos = 0;
 
         Token *tokens = tokenize(input);
+        if (tokens==NULL)
+        {
+            free_tokens(tokens);
+            free(input);
+            continue;
+        }
         ASTNode *node = parse_pipeline(tokens, &pos);
         free_tokens(tokens);
         executeAst(node);

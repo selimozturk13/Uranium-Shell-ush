@@ -17,11 +17,11 @@
 
 #define _GNU_SOURCE
 #include "ush.h"
+#include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <unistd.h>
 #include <signal.h>
-#include <stdio.h>
 
 
 extern int rl_done;
