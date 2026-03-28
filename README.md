@@ -9,7 +9,7 @@
 ## Features
 
 - Proper backslash escaping (`\\` → `\`, `\n`, `\t`)
-- Builtin `echo` (fixes macOS BSD echo `\c` bug)
+- Builtin `echo` 
 - Tokenization supporting single and double quotes
 - Pipe (`|`) support
 
