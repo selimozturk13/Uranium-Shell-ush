@@ -18,7 +18,7 @@
 
 ```bash
 git clone https://github.com/selimozturk13/Uranium-Shell-ush.git
-cd ush
+cd Uranium-Shell-ush
 ```
 ### 2. Build
 
@@ -43,7 +43,7 @@ make
 ./build/ush
 
 # If you used Makefile
-./build/ush
+./ush
 ```
 
 ## License

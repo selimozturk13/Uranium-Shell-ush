@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <limits.h>
 
-void update_promt()
+void update_prompt()
 {
     struct passwd *pw = getpwuid(geteuid());
     if (pw == NULL)

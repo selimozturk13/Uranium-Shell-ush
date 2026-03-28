@@ -28,21 +28,21 @@
 void cli_loop(void)
 {
     char *input;
-    char userpromt[1024 + PATH_MAX];
+    char userprompt[1024 + PATH_MAX];
 
     while (1)
     {
-        update_promt();
+        update_prompt();
         
-        if (snprintf(userpromt, sizeof(userpromt), "%s@%s %s $ ", username, host,cwd)<0)
+        if (snprintf(userprompt, sizeof(userprompt), "%s@%s %s $ ", username, host,cwd)<0)
         {
-            fprintf(stderr,"ush: critical: failed to format promt.");
+            fprintf(stderr,"ush: critical: failed to format prompt.");
             free(username);
             break;
 
         }
         free(username);
-        input = readline(userpromt);
+        input = readline(userprompt);
         if (input == NULL )
         {
             if (errno == EINTR) { 
