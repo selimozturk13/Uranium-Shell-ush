@@ -4,6 +4,7 @@
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 ![Language](https://img.shields.io/badge/language-C-blue)
+![License](https://img.shields.io/badge/license-GPLv3-blue)
 
 ## Features
 
