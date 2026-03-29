@@ -33,7 +33,7 @@ void cli_loop(void)
     while (1)
     {
         update_prompt();
-        if (snprintf(userprompt, sizeof(userprompt), "%s%s%s@%s %s%s%s $ ",
+        if (snprintf(userprompt, sizeof(userprompt), "%s%s%s@%s:%s%s%s $ ",
                      P_BOLD_GREEN, username, P_RESET, host, P_BOLD_BLUE, cwd,
                      P_RESET) < 0)
         {
