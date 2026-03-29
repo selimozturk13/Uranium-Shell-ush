@@ -2,9 +2,19 @@
 
 **ush** is a minimal Unix-like shell written in C.
 
-![Status](https://img.shields.io/badge/status-active-brightgreen)
-![Language](https://img.shields.io/badge/language-C-blue)
-![License](https://img.shields.io/badge/license-GPLv3-blue)
+![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat)
+![Language](https://img.shields.io/badge/language-C-00599C?style=flat)
+![Compliance](https://img.shields.io/badge/compliance-POSIX-FFD100?style=flat)
+![Memory](https://img.shields.io/badge/memory-safe-32CD32?style=flat)
+![License](https://img.shields.io/badge/license-GPLv3-007acc?style=flat)
+
+## 💻 Compatibility & Environment  
+This project is designed to be **platform-independent across Unix-like systems**, adhering to *POSIX standards*.
+
+- **Development OS:** *macOS*  
+- **Testing Environment:** Verified on **Fedora** (via *Podman container*)  
+- **Standards:** Fully **POSIX compliant**  
+- **Windows Support:** *Not natively supported.* Recommended to use **WSL2** or *Podman/Docker* for a seamless experience.
 
 ## Features
 
@@ -40,7 +50,7 @@ sudo apt install build-essential cmake ninja-build libreadline-dev
 sudo pacman -Syu gcc cmake ninja make readline
 ```
 
-### Via Homebrew (macOS)
+#### Via Homebrew (macOS)
 ```bash
 brew install gcc cmake ninja readline
 ```
@@ -85,7 +95,27 @@ Uranium-Shell (ush) has been tested on the following systems:
 | OS / Distro        | Architecture | Compiler      | Build System       |
 |:-------------------|:-------------:|:---------------:|:------------------:|
 | macOS 13 Ventura        | x86_64      | clang 14.0.3    | CMake + Ninja     |
-| Fedora 43          | x86_64      | gcc 15.2.1     | CMake + Make      |
+| Fedora 43          | x86_64      | gcc 15.2.1     | CMake + Ninja    
+
+## 🛡️ Memory Safety & Valgrind
+
+This project is developed with a **strict focus on memory safety**. The codebase is verified to be free of any *"definitely lost"* or *"indirectly lost"* memory leaks.
+
+The *"still reachable"* blocks reported by **Valgrind** are exclusively related to the internal implementation of the *readline* library.
+
+### 📊 Summary
+
+| Category                | Status        | Description |
+|------------------------|--------------|-------------|
+| **Definitely Lost**    | ✅ None       | No memory leaks caused by application logic |
+| **Indirectly Lost**    | ✅ None       | No chained or dependent leaks detected |
+| **Still Reachable**    | ⚠️ Expected   | Caused by *readline* internal static buffers |
+
+### 📌 Details
+
+- **Zero Leaks:** All memory allocated by the application logic is properly deallocated.  
+- **Readline Artifacts:** *readline* and *add_history* use internal static buffers that persist until process termination.  
+  These are **standard library behaviors** and do **not** indicate a flaw in the project's memory management.
 
 ## License
 
