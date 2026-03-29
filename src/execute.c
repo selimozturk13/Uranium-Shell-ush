@@ -22,6 +22,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+// prints characters
 static void builtin_echo(char **tokens)
 {
     if (!tokens || !tokens[1])
@@ -39,6 +40,66 @@ static void builtin_echo(char **tokens)
     putchar('\n');
 }
 
+// changes directory
+static void builtin_cd(ASTNode *node)
+{
+    // go to previus directory
+    if (node->data.cmd.args[1] != NULL && !strcmp(node->data.cmd.args[1], "-"))
+    {
+        if (strlen(last_dir) != 0)
+        {
+            if (chdir(last_dir))
+                perror("ush: chdir");
+            else
+            {
+                strncpy(last_dir, cwd, sizeof(last_dir) - 1);
+                last_dir[sizeof(cwd) - 1] = '\0';
+            }
+        }
+    }
+
+    // normal change dir
+    else if (node->data.cmd.args[1] != NULL)
+    {
+        if (chdir(node->data.cmd.args[1]))
+            perror("ush: chdir");
+        else
+        {
+            strncpy(last_dir, cwd, sizeof(last_dir) - 1);
+            last_dir[sizeof(cwd) - 1] = '\0';
+        }
+    }
+    else
+    {
+        if (chdir(getenv("HOME")))
+        {
+            perror("ush: chdir");
+        }
+    }
+    return;
+}
+
+// writes exit to global variable pexit
+static void builtin_exit(ASTNode *node)
+{
+    if (node->data.cmd.args[1] != NULL)
+    {
+        if (atoi(node->data.cmd.args[1]) > 255)
+        {
+            pexit = atoi(node->data.cmd.args[1]) % 256;
+        }
+        else
+        {
+            pexit = atoi(node->data.cmd.args[1]);
+        }
+    }
+    else
+    {
+        pexit = 0;
+    }
+    return;
+}
+
 void executeAst(ASTNode *node)
 {
     if (!node)
@@ -49,43 +110,19 @@ void executeAst(ASTNode *node)
         if (!(node->data.cmd.args != NULL && node->data.cmd.args[0] != NULL))
             return;
 
+        // builtin cd
         if (!strcmp(node->data.cmd.args[0], "cd"))
         {
-            if (node->data.cmd.args[1] != NULL)
-            {
-                if (chdir(node->data.cmd.args[1]))
-                    perror("ush: chdir");
-            }
-            else
-            {
-                if (chdir(getenv("HOME")))
-                {
-                    perror("ush: chdir");
-                }
-            }
-            return;
+            builtin_cd(node);
         }
 
+        // builtin exit
         else if (!strcmp(node->data.cmd.args[0], "exit"))
         {
-            if (node->data.cmd.args[1] != NULL)
-            {
-                if (atoi(node->data.cmd.args[1]) > 255)
-                {
-                    pexit = atoi(node->data.cmd.args[1]) % 256;
-                }
-                else
-                {
-                    pexit = atoi(node->data.cmd.args[1]);
-                }
-            }
-            else
-            {
-                pexit = 0;
-            }
-            return;
+            builtin_exit(node);
         }
 
+        // builtin echo
         else if (strcmp(node->data.cmd.args[0], "echo") == 0)
         {
             builtin_echo(&node->data.cmd.args[0]);

@@ -17,7 +17,7 @@
 
 #pragma once
 
-#define PROGRAM_VERSION "v0.1.3"
+#define PROGRAM_VERSION "v0.1.4"
 #define MAX_ARGS 64
 
 #define P_BOLD_GREEN "\x1b[1;32m"
@@ -73,10 +73,11 @@ typedef struct
     char *value;
 } Token;
 
-extern char cwd[PATH_MAX];
+extern char cwd[PATH_MAX+1];
 extern char host[256];
 extern char *username;
 extern int pexit;
+extern char last_dir[PATH_MAX+1];
 
 void cli_loop(void);
 Token *tokenize(char *line);

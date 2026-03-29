@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 void cli_loop(void)
 {
@@ -33,14 +34,18 @@ void cli_loop(void)
     while (1)
     {
         update_prompt();
+        char *readable = absPathToMoreReadable(cwd);
+        
         if (snprintf(userprompt, sizeof(userprompt), "%s%s%s@%s:%s%s%s $ ",
-                     P_BOLD_GREEN, username, P_RESET, host, P_BOLD_BLUE, cwd,
+                     P_BOLD_GREEN, username, P_RESET, host, P_BOLD_BLUE, readable,
                      P_RESET) < 0)
         {
             fprintf(stderr, "ush: critical: failed to format prompt.");
+            free(readable);
             free(username);
             break;
         }
+        free(readable);
         free(username);
         input = readline(userprompt);
         if (input == NULL)

@@ -17,7 +17,8 @@
 
 #include "ush.h"
 
-char cwd[PATH_MAX];
+char cwd[PATH_MAX+1];
 char host[256];
 char *username;
 int pexit=256;
+char last_dir[PATH_MAX+1];

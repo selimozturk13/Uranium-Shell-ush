@@ -22,6 +22,7 @@ This project is designed to be **platform-independent across Unix-like systems**
 - Builtin `echo` 
 - Tokenization supporting single and double quotes
 - Pipe (`|`) support
+- Colored prompt
 
 ## Dependencies
 

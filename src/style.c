@@ -58,12 +58,7 @@ void update_prompt()
             strcpy(cwd, "?");
         }
     }
-    char *readable = absPathToMoreReadable(cwd);
-    if (readable) {
-        strncpy(cwd, readable, sizeof(cwd) - 1);
-        cwd[sizeof(cwd) - 1] = '\0'; 
-        free(readable); 
-    }
+    
 }
 
 char *absPathToMoreReadable(char *abspath) {
