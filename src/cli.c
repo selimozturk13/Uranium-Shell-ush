@@ -16,14 +16,14 @@
  */
 
 #include "ush.h"
+#include <errno.h>
 #include <limits.h>
 #include <pwd.h>
-#include <stdio.h>
 #include <readline/history.h>
 #include <readline/readline.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <errno.h>
 
 void cli_loop(void)
 {
@@ -33,23 +33,24 @@ void cli_loop(void)
     while (1)
     {
         update_prompt();
-        
-        if (snprintf(userprompt, sizeof(userprompt), "%s@%s %s $ ", username, host,cwd)<0)
+        if (snprintf(userprompt, sizeof(userprompt), "%s%s%s@%s %s%s%s $ ",
+                     P_BOLD_GREEN, username, P_RESET, host, P_BOLD_BLUE, cwd,
+                     P_RESET) < 0)
         {
-            fprintf(stderr,"ush: critical: failed to format prompt.");
+            fprintf(stderr, "ush: critical: failed to format prompt.");
             free(username);
             break;
-
         }
         free(username);
         input = readline(userprompt);
-        if (input == NULL )
+        if (input == NULL)
         {
-            if (errno == EINTR) { 
-                errno = 0; 
-                continue;   
+            if (errno == EINTR)
+            {
+                errno = 0;
+                continue;
             }
-            
+
             free(input);
             break;
         }
@@ -61,7 +62,7 @@ void cli_loop(void)
         int pos = 0;
 
         Token *tokens = tokenize(input);
-        if (tokens==NULL)
+        if (tokens == NULL)
         {
             free_tokens(tokens);
             free(input);
@@ -73,7 +74,7 @@ void cli_loop(void)
         free_ast(node);
 
         free(input);
-        if (pexit<=255)
+        if (pexit <= 255)
         {
             break;
         }

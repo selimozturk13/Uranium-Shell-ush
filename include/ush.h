@@ -17,8 +17,13 @@
 
 #pragma once
 
-#define PROGRAM_VERSION "v0.1.0"
+#define PROGRAM_VERSION "v0.1.3"
 #define MAX_ARGS 64
+
+#define P_BOLD_GREEN "\x1b[1;32m"
+#define P_BOLD_BLUE "\x1b[1;34m"
+#define P_RESET "\x1b[0m"
+#define P_BOLD "\x1b[1m"
 
 #include <limits.h>
 
